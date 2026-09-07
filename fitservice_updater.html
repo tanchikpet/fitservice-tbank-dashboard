@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ФИТ Сервис · Обновление дашборда</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#FBFCFD; --surface:#F2F3F5; --card:#FFFFFF;
+  --orange:#FE5000; --blue:#0762C8;
+  --dark:#000000; --text:#586066; --muted:#90979C; --border:#CBD2D7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--dark);font-size:14px;}
+
+.header{background:#fff;border-bottom:3px solid var(--orange);padding:16px 28px;display:flex;align-items:center;gap:16px;}
+.logo{font-size:18px;font-weight:700;color:var(--orange);}
+.logo span{color:var(--blue);}
+.header-sub{color:var(--muted);font-size:12px;}
+
+.main{max-width:960px;margin:0 auto;padding:28px 20px;}
+
+.step{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:18px;}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--orange);color:#fff;border-radius:50%;font-size:12px;font-weight:700;margin-right:10px;flex-shrink:0;}
+.step-title{font-size:15px;font-weight:700;display:flex;align-items:center;margin-bottom:14px;}
+.step-body{color:var(--text);}
+
+.drop-zone{border:2px dashed var(--border);border-radius:8px;padding:28px;text-align:center;cursor:pointer;transition:.2s;background:var(--surface);}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--orange);background:#FFF2EE;}
+.drop-zone input{display:none;}
+.drop-zone .icon{font-size:28px;margin-bottom:8px;}
+.drop-zone .label{font-size:13px;color:var(--muted);}
+.drop-zone .label b{color:var(--orange);}
+
+.file-list{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.file-item{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:6px;padding:8px 12px;font-size:12px;}
+.file-item .fname{flex:1;font-weight:600;color:var(--dark);}
+.file-item .fstatus{color:var(--blue);font-weight:600;}
+.file-item .fstatus.err{color:var(--orange);}
+
+.preview-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:14px;}
+.preview-table th{background:var(--orange);color:#fff;padding:7px 10px;text-align:left;font-size:11px;}
+.preview-table td{padding:6px 10px;border-bottom:1px solid var(--border);}
+.preview-table tr:nth-child(even) td{background:var(--surface);}
+.preview-table td.num{text-align:right;font-weight:600;color:var(--blue);}
+.preview-table td.ok{color:#27ae60;font-weight:700;}
+
+.github-section{display:flex;flex-direction:column;gap:12px;}
+.input-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.input-row label{font-size:12px;color:var(--muted);width:180px;flex-shrink:0;}
+.inp{flex:1;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px;background:#fff;min-width:200px;}
+.inp:focus{outline:none;border-color:var(--orange);}
+.inp-note{font-size:11px;color:var(--muted);margin-top:3px;}
+
+.btn{padding:10px 22px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.15s;}
+.btn-primary{background:var(--orange);color:#fff;}
+.btn-primary:hover{background:#e04800;}
+.btn-primary:disabled{background:var(--muted);cursor:not-allowed;}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border);}
+
+.log{background:#1a1d27;color:#e8eaf0;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;max-height:200px;overflow-y:auto;margin-top:12px;line-height:1.6;}
+.log .ok{color:#2ecc71;} .log .err{color:#fe5000;} .log .info{color:#4a9eff;}
+
+.progress{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:10px;}
+.progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .3s;width:0%;}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.badge-new{background:#EEF4FF;color:var(--blue);}
+.badge-done{background:#E8F8EF;color:#27ae60;}
+.badge-wait{background:var(--surface);color:var(--muted);}
+
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px;}
+.summary-card{background:var(--surface);border-radius:8px;padding:12px;text-align:center;}
+.summary-card .val{font-size:22px;font-weight:700;color:var(--orange);}
+.summary-card .lbl{font-size:10px;color:var(--muted);margin-top:3px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="logo">ФИТ <span>Сервис</span> × ТБанк</div>
+    <div class="header-sub">Обновление дашборда · Загрузка данных из 1С</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- STEP 1: Upload TBank aggregate files -->
+  <div class="step">
+    <div class="step-title"><span class="step-num">1</span>Выгрузки ТБанк (агрегат по городам)</div>
+    <div class="step-body">
+      <p style="margin-bottom:12px;color:var(--muted)">Файлы вида <b>Выгрузка_ТБанк_январь_25.xlsx</b> — один или несколько месяцев сразу.</p>
+      <div class="drop-zone" id="dropTbank" onclick="document.getElementById('fileTbank').click()">
+        <div class="icon">📊</div>
+        <div class="label">Перетащите файлы сюда или <b>нажмите для выбора</b></div>
+        <div class="label" style="margin-top:4px">Выгрузка_ТБанк_*.xlsx · несколько файлов</div>
+        <input type="file" id="fileTbank" multiple accept=".xlsx,.xls" onchange="handleTbankFiles(this.files)">
+      </div>
+      <div class="file-list" id="tbankFileList"></div>
+      <div id="tbankPreview"></div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Upload internal ZN files -->
+  <div class="step">
+    <div class="step-title"><span class="step-num">2</span>Внутренние ЗН из 1С (для расчёта УНК)</div>
+    <div class="step-body">
+      <p style="margin-bottom:12px;color:var(--muted)">Файлы вида <b>ЗН_январь_2026.xlsx</b> — список заказ-нарядов с номерами телефонов.</p>
+      <div class="drop-zone" id="dropZN" onclick="document.getElementById('fileZN').click()">
+        <div class="icon">📋</div>
+        <div class="label">Перетащите файлы сюда или <b>нажмите для выбора</b></div>
+        <div class="label" style="margin-top:4px">ЗН_*.xlsx · несколько файлов</div>
+        <input type="file" id="fileZN" multiple accept=".xlsx,.xls" onchange="handleZNFiles(this.files)">
+      </div>
+      <div class="file-list" id="znFileList"></div>
+      <div id="znPreview"></div>
+    </div>
+  </div>
+
+  <!-- STEP 3: GitHub push -->
+  <div class="step">
+    <div class="step-title"><span class="step-num">3</span>Обновить дашборд на GitHub</div>
+    <div class="step-body">
+      <div class="github-section">
+        <div class="input-row">
+          <label>GitHub токен</label>
+          <div style="flex:1">
+            <input class="inp" type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+            <div class="inp-note">Нужен токен с правом <b>repo</b>. <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--blue)">Создать токен →</a></div>
+          </div>
+        </div>
+        <div class="input-row">
+          <label>GitHub логин / репозиторий</label>
+          <input class="inp" type="text" id="ghRepo" placeholder="username/fitservice-dashboard">
+        </div>
+        <div class="input-row">
+          <label>Имя файла на GitHub</label>
+          <input class="inp" type="text" id="ghFile" value="index.html">
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+          <button class="btn btn-primary" onclick="pushToGitHub()" id="btnPush" disabled>🚀 Обновить на GitHub</button>
+          <button class="btn btn-secondary" onclick="downloadHTML()">💾 Скачать HTML файл</button>
+        </div>
+        <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="log" id="log" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────
+const state = {
+  tbank: {},    // period → parsed monthly data
+  zn: {},       // period → Set of phones
+  allTbankPhones: new Set(),
+};
+
+const MONTH_LABELS = {
+  '2025-10':"Окт'25",'2025-11':"Ноя'25",'2025-12':"Дек'25",
+  '2026-01':"Янв'26",'2026-02':"Фев'26",'2026-03':"Мар'26",
+  '2026-04':"Апр'26",'2026-05':"Май'26",'2026-06':"Июн'26",
+  '2026-07':"Июл'26",'2026-08':"Авг'26",'2026-09':"Сен'26",
+  '2026-10':"Окт'26",'2026-11':"Ноя'26",'2026-12':"Дек'26",
+};
+
+// Detect period from filename
+function detectPeriod(fname) {
+  const RU_MONTHS = {
+    'январ':'01','феврал':'02','март':'03','апрел':'04','май':'05','июн':'06',
+    'июл':'07','август':'08','сентябр':'09','октябр':'10','ноябр':'11','декабр':'12'
+  };
+  const lower = fname.toLowerCase();
+  const yearMatch = lower.match(/_(2[0-9])\.xlsx/i) || lower.match(/_20(2[0-9])/i);
+  let year = '2026';
+  if (yearMatch) year = yearMatch[1].length === 2 ? '20'+yearMatch[1] : yearMatch[0].slice(-4);
+  for (const [ru, num] of Object.entries(RU_MONTHS)) {
+    if (lower.includes(ru)) return `${year}-${num}`;
+  }
+  return null;
+}
+
+function normalizePhone(ph) {
+  if (!ph) return null;
+  const digits = String(ph).replace(/[^0-9]/g,'');
+  if (digits.length < 10) return null;
+  if (digits === '1111111111' || digits === '0000000000') return null;
+  return digits.slice(-10);
+}
+
+function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
+
+// ── Drag & drop ───────────────────────────────────────────────
+['dropTbank','dropZN'].forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag');});
+  el.addEventListener('dragleave',()=>el.classList.remove('drag'));
+  el.addEventListener('drop',e=>{
+    e.preventDefault(); el.classList.remove('drag');
+    if (id==='dropTbank') handleTbankFiles(e.dataTransfer.files);
+    else handleZNFiles(e.dataTransfer.files);
+  });
+});
+
+// ── Parse TBank aggregate ────────────────────────────────────
+async function handleTbankFiles(files) {
+  const list = document.getElementById('tbankFileList');
+  list.innerHTML = '';
+  for (const file of files) {
+    const period = detectPeriod(file.name);
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML = `<span class="fname">${file.name}</span><span class="fstatus" id="st_tb_${file.name.replace(/\W/g,'_')}">⏳ читаю...</span>`;
+    list.appendChild(item);
+    const stEl = item.querySelector('.fstatus');
+    try {
+      const data = await readXLSX(file);
+      const parsed = parseTbankAggregate(data, period, file.name);
+      if (parsed) {
+        state.tbank[parsed.period] = parsed;
+        stEl.textContent = `✓ ${MONTH_LABELS[parsed.period]||parsed.period}: записей=${fmt(parsed.events)}, ЗН=${fmt(parsed.zn)}`;
+        stEl.className = 'fstatus';
+      } else {
+        stEl.textContent = '⚠ не удалось определить период';
+        stEl.className = 'fstatus err';
+      }
+    } catch(e) {
+      stEl.textContent = '✗ ошибка: '+e.message;
+      stEl.className = 'fstatus err';
+    }
+  }
+  renderTbankPreview();
+  checkReady();
+}
+
+function parseTbankAggregate(rows, period, fname) {
+  if (!period) period = detectPeriod(fname);
+  if (!period) return null;
+  // Find totals row (row[0] === 'Tbank' or similar)
+  const skip = ['Параметры:','Отбор:','Источник записи','Город','СТО',null,undefined,''];
+  let totalRow = null;
+  for (const row of rows) {
+    const n = row[0];
+    if (n && String(n).trim().toLowerCase().includes('tbank')) { totalRow = row; break; }
+  }
+  if (!totalRow) {
+    // Try to sum city rows
+    let ev=0,nv=0,ov=0,zn_n=0,zn_o=0,rv_n=0,rv_o=0,rv_n_avg=0,rv_o_avg=0;
+    for (const row of rows.slice(7)) {
+      const n = row[0];
+      if (!n || String(n).trim()==='Итого') continue;
+      if (skip.includes(n)) continue;
+      if (String(n).includes(',')) continue; // station row
+      ev += (row[3]||0);
+      nv += (row[7]||0);
+      ov += (row[9]||0);
+      zn_n += (row[11]||0);
+      rv_n += (row[12]||0);
+      rv_n_avg = zn_n>0 ? rv_n/zn_n : 0;
+      zn_o += (row[14]||0);
+      rv_o += (row[15]||0);
+    }
+    return {period, label:MONTH_LABELS[period]||period,
+      events:ev,nv,ov,zn:zn_n+zn_o,zn_nv:zn_n,zn_ov:zn_o,
+      rev:rv_n+rv_o,rev_new:rv_n,rev_old:rv_o};
+  }
+  const r = totalRow;
+  const ev=r[3]||0, nv=r[7]||0, ov=r[9]||0;
+  const zn_n=r[11]||0, rv_n=r[12]||0;
+  const zn_o=r[14]||0, rv_o=r[15]||0;
+  return {period, label:MONTH_LABELS[period]||period,
+    events:ev,nv,ov,zn:zn_n+zn_o,zn_nv:zn_n,zn_ov:zn_o,
+    rev:rv_n+rv_o,rev_new:rv_n,rev_old:rv_o};
+}
+
+function renderTbankPreview() {
+  const sorted = Object.values(state.tbank).sort((a,b)=>a.period.localeCompare(b.period));
+  if (!sorted.length) return;
+  const totalEv = sorted.reduce((s,m)=>s+m.events,0);
+  const totalZN = sorted.reduce((s,m)=>s+m.zn,0);
+  const totalRev = sorted.reduce((s,m)=>s+m.rev,0);
+  const conv = totalEv>0?(totalZN/totalEv*100).toFixed(1):0;
+
+  let html = `<div class="summary-grid">
+    <div class="summary-card"><div class="val">${fmt(totalEv)}</div><div class="lbl">Записей</div></div>
+    <div class="summary-card"><div class="val">${fmt(totalZN)}</div><div class="lbl">ЗН оплач.</div></div>
+    <div class="summary-card"><div class="val">${conv}%</div><div class="lbl">Конверсия</div></div>
+    <div class="summary-card"><div class="val">₽${Math.round(totalRev/1000000)}М</div><div class="lbl">Выручка</div></div>
+  </div>
+  <table class="preview-table" style="margin-top:14px">
+    <thead><tr><th>Месяц</th><th>Записей</th><th>НК</th><th>СК</th><th>ЗН</th><th>Конв.%</th><th>Выручка</th></tr></thead>
+    <tbody>`;
+  sorted.forEach(m=>{
+    const conv = m.events>0?(m.zn/m.events*100).toFixed(1):0;
+    html+=`<tr><td>${m.label}</td><td class="num">${fmt(m.events)}</td><td class="num">${fmt(m.nv)}</td>
+      <td class="num">${fmt(m.ov)}</td><td class="num">${fmt(m.zn)}</td>
+      <td class="num">${conv}%</td><td class="num">₽${Math.round(m.rev/1000)}К</td></tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('tbankPreview').innerHTML = html;
+}
+
+// ── Parse ZN files ────────────────────────────────────────────
+async function handleZNFiles(files) {
+  const list = document.getElementById('znFileList');
+  list.innerHTML = '';
+  for (const file of files) {
+    const period = detectPeriod(file.name);
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML = `<span class="fname">${file.name}</span><span class="fstatus" id="st_zn_${file.name.replace(/\W/g,'_')}">⏳ читаю...</span>`;
+    list.appendChild(item);
+    const stEl = item.querySelector('.fstatus');
+    try {
+      const rows = await readXLSX(file);
+      // Detect phone column
+      let phoneCol = 4; // default
+      const header = rows[5] || rows[0];
+      if (header) {
+        for (let i=0;i<header.length;i++) {
+          if (header[i] && String(header[i]).toLowerCase().includes('телефон')) { phoneCol=i; break; }
+        }
+      }
+      const phones = new Set();
+      for (const row of rows.slice(6)) {
+        if (!row[0]) continue;
+        const ph = normalizePhone(row[phoneCol]);
+        if (ph) phones.add(ph);
+      }
+      const per = period || 'unknown';
+      state.zn[per] = phones;
+      stEl.textContent = `✓ ${MONTH_LABELS[per]||per}: ${fmt(phones.size)} уник. клиентов`;
+      stEl.className = 'fstatus';
+    } catch(e) {
+      stEl.textContent = '✗ ошибка: '+e.message;
+      stEl.className = 'fstatus err';
+    }
+  }
+  renderZNPreview();
+  checkReady();
+}
+
+function renderZNPreview() {
+  // Calculate UNK
+  const seen = new Set();
+  let html = '<table class="preview-table" style="margin-top:14px"><thead><tr><th>Месяц</th><th>Клиентов в ЗН</th><th>Новых УНК</th><th>Накопленно УНК</th></tr></thead><tbody>';
+  let hasData = false;
+  for (const period of Object.keys(state.zn).sort()) {
+    const phones = state.zn[period];
+    const newOnes = new Set([...phones].filter(p=>!seen.has(p)));
+    newOnes.forEach(p=>seen.add(p));
+    html+=`<tr><td>${MONTH_LABELS[period]||period}</td><td class="num">${fmt(phones.size)}</td><td class="num ok">${fmt(newOnes.size)}</td><td class="num">${fmt(seen.size)}</td></tr>`;
+    hasData = true;
+  }
+  if (!hasData) return;
+  html += `</tbody></table><div style="margin-top:10px;font-size:12px;color:var(--muted)">Итого УНК за весь период: <b style="color:var(--orange)">${fmt(seen.size)}</b></div>`;
+  document.getElementById('znPreview').innerHTML = html;
+}
+
+// ── XLSX reader ───────────────────────────────────────────────
+function readXLSX(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+        resolve(rows);
+      } catch(err) { reject(err); }
+    };
+    reader.onerror = () => reject(new Error('FileReader error'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ── Check ready ───────────────────────────────────────────────
+function checkReady() {
+  const hasData = Object.keys(state.tbank).length > 0;
+  document.getElementById('btnPush').disabled = !hasData;
+}
+
+// ── Build updated JS data block ───────────────────────────────
+function buildDataBlock() {
+  const sorted = Object.values(state.tbank).sort((a,b)=>a.period.localeCompare(b.period));
+  const znSeen = new Set();
+  const unkByPeriod = {};
+  for (const period of Object.keys(state.zn).sort()) {
+    const phones = state.zn[period];
+    const newOnes = [...phones].filter(p=>!znSeen.has(p));
+    newOnes.forEach(p=>znSeen.add(p));
+    unkByPeriod[period] = {unk_m: phones.size, unk_new: newOnes.length, unk_ret: phones.size - newOnes.length};
+  }
+
+  // Build months array with hardcoded commission (user will need to update manually or we leave as 0)
+  const lines = sorted.map(m => {
+    const u = unkByPeriod[m.period] || {unk_m:null,unk_new:null,unk_ret:null};
+    return `  {p:'${m.period}',l:"${m.label}", ev:${m.events},nv:${m.nv},ov:${m.ov}, zn:${m.zn}, zn_nv:${m.zn_nv},zn_ov:${m.zn_ov}, rev:${Math.round(m.rev)},parts:0,comm:0, unk_m:${u.unk_m??'null'},unk_new:${u.unk_new??'null'},unk_ret:${u.unk_ret??'null'}}`;
+  });
+  return `const months = [
+${lines.join(',
+')},
+];`;
+}
+
+// ── Download updated HTML ─────────────────────────────────────
+async function downloadHTML() {
+  const dataBlock = buildDataBlock();
+  // We'll fetch the current dashboard from GitHub and update data
+  const repo = document.getElementById('ghRepo').value.trim();
+  const fname = document.getElementById('ghFile').value.trim() || 'index.html';
+  const token = document.getElementById('ghToken').value.trim();
+
+  let currentHTML = '';
+  if (repo && token) {
+    addLog('info','Получаю текущий файл с GitHub...');
+    currentHTML = await fetchFromGitHub(repo, fname, token);
+  }
+
+  if (currentHTML) {
+    const updated = updateDataInHTML(currentHTML, dataBlock);
+    triggerDownload(updated, fname);
+    addLog('ok', 'Файл готов к скачиванию');
+  } else {
+    addLog('err','Не удалось получить файл с GitHub. Скопируйте блок данных ниже вручную.');
+    addLog('info', dataBlock.substring(0,200)+'...');
+  }
+}
+
+function updateDataInHTML(html, newDataBlock) {
+  // Replace months array in dashboard
+  const pattern = /const months = \[[\s\S]*?\];/;
+  if (pattern.test(html)) {
+    return html.replace(pattern, newDataBlock);
+  }
+  return html;
+}
+
+// ── GitHub API ────────────────────────────────────────────────
+async function fetchFromGitHub(repo, path, token) {
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+  const r = await fetch(url, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
+  if (!r.ok) throw new Error(`GitHub: ${r.status} ${r.statusText}`);
+  const data = await r.json();
+  return atob(data.content.replace(/\n/g,''));
+}
+
+async function getFileSHA(repo, path, token) {
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+  const r = await fetch(url, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
+  if (!r.ok) return null;
+  const data = await r.json();
+  return data.sha;
+}
+
+async function pushToGitHub() {
+  const token = document.getElementById('ghToken').value.trim();
+  const repo  = document.getElementById('ghRepo').value.trim();
+  const fname = document.getElementById('ghFile').value.trim() || 'index.html';
+
+  if (!token || !repo) { addLog('err','Укажите токен и репозиторий'); return; }
+
+  const btn = document.getElementById('btnPush');
+  btn.disabled = true;
+  btn.textContent = '⏳ Обновляю...';
+  document.getElementById('log').style.display = 'block';
+  setProgress(10);
+
+  try {
+    addLog('info', `Подключаюсь к ${repo}...`);
+    const currentHTML = await fetchFromGitHub(repo, fname, token);
+    addLog('ok', `Файл получен: ${currentHTML.length.toLocaleString()} символов`);
+    setProgress(35);
+
+    addLog('info', 'Обновляю данные...');
+    const dataBlock = buildDataBlock();
+    const updatedHTML = updateDataInHTML(currentHTML, dataBlock);
+
+    if (updatedHTML === currentHTML) {
+      addLog('err', 'Блок данных не найден в HTML. Убедитесь что файл содержит const months = [...]');
+      btn.disabled = false; btn.textContent = '🚀 Обновить на GitHub';
+      return;
+    }
+    addLog('ok', `Данных обновлено: ${Object.keys(state.tbank).length} месяцев`);
+    setProgress(55);
+
+    addLog('info', 'Получаю SHA файла...');
+    const sha = await getFileSHA(repo, fname, token);
+    setProgress(70);
+
+    addLog('info', 'Загружаю обновлённый файл...');
+    const content = btoa(unescape(encodeURIComponent(updatedHTML)));
+    const periods = Object.keys(state.tbank).sort();
+    const commitMsg = `Обновление данных: ${periods.map(p=>MONTH_LABELS[p]||p).join(', ')}`;
+
+    const body = {message: commitMsg, content, ...(sha ? {sha} : {})};
+    const pushUrl = `https://api.github.com/repos/${repo}/contents/${fname}`;
+    const r = await fetch(pushUrl, {
+      method:'PUT',
+      headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
+      body: JSON.stringify(body)
+    });
+
+    if (!r.ok) {
+      const err = await r.json();
+      throw new Error(`${r.status}: ${err.message}`);
+    }
+    setProgress(100);
+    addLog('ok', '✅ Дашборд обновлён на GitHub!');
+    addLog('info', `Коммит: "${commitMsg}"`);
+    addLog('info', `Страница обновится через 1–2 минуты: https://${repo.split('/')[0]}.github.io/${repo.split('/')[1]}/`);
+
+  } catch(e) {
+    addLog('err', '✗ Ошибка: '+e.message);
+    setProgress(0);
+  }
+  btn.disabled = false;
+  btn.textContent = '🚀 Обновить на GitHub';
+}
+
+function triggerDownload(html, fname) {
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fname;
+  a.click();
+}
+
+function setProgress(pct) {
+  document.getElementById('progressFill').style.width = pct+'%';
+}
+
+function addLog(type, msg) {
+  const log = document.getElementById('log');
+  log.style.display = 'block';
+  const line = document.createElement('div');
+  line.className = type;
+  line.textContent = new Date().toLocaleTimeString('ru')+'  '+msg;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+</script>
+</body>
+</html>
