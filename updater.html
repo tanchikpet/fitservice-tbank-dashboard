@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ФИТ Сервис × ТБанк · Обновление данных</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiByeD0iMTYiIGZpbGw9IiNGRTUwMDAiIHN0eWxlPSJmaWxsOiNGRTUwMDA7ZmlsbDpjb2xvcihkaXNwbGF5LXAzIDAuOTk2MSAwLjMxMzcgMC4wMDAwKTtmaWxsLW9wYWNpdHk6MTsiLz4KPHBhdGggZD0iTTM1LjUzNiA1OS4zMDRWNjkuOTQ0SDM2LjI1OEM0MC43MTY3IDY5Ljk0NCA0Mi45NDYgNjguMTgzMyA0Mi45NDYgNjQuNjYyQzQyLjk0NiA2Mi43MTEzIDQyLjQxNCA2MS4zMzA3IDQxLjM1IDYwLjUyQzQwLjMxMTMgNTkuNzA5MyAzOC42MTQgNTkuMzA0IDM2LjI1OCA1OS4zMDRIMzUuNTM2Wk0yNi45ODYgNjkuOTQ0SDI3Ljc0NlY1OS4zMDRIMjYuOTQ4QzI0LjY2OCA1OS4zMDQgMjIuOTk2IDU5LjcwOTMgMjEuOTMyIDYwLjUyQzIwLjg5MzMgNjEuMzMwNyAyMC4zNzQgNjIuNzExMyAyMC4zNzQgNjQuNjYyQzIwLjM3NCA2Ni42MTI3IDIwLjg5MzMgNjcuOTgwNyAyMS45MzIgNjguNzY2QzIyLjk5NiA2OS41NTEzIDI0LjY4MDcgNjkuOTQ0IDI2Ljk4NiA2OS45NDRaTTM1LjgwMiA3NS45ODZWNzguNTdIMjcuNDQyVjc1Ljk4NkgyNi41M0MyMS41OSA3NS45ODYgMTcuODQwNyA3NS4wMjMzIDE1LjI4MiA3My4wOThDMTIuNzQ4NyA3MS4xNzI3IDExLjQ4MiA2OC4zNjA3IDExLjQ4MiA2NC42NjJDMTEuNDgyIDYxLjAxNCAxMi43ODY3IDU4LjIxNDcgMTUuMzk2IDU2LjI2NEMxOC4wMzA3IDU0LjI4OCAyMS43MTY3IDUzLjMgMjYuNDU0IDUzLjNIMjcuNDQyVjUwLjgzSDM1LjgwMlY1My4zSDM2Ljc1MkM0MS42OTIgNTMuMyA0NS40Mjg3IDU0LjI2MjcgNDcuOTYyIDU2LjE4OEM1MC40OTUzIDU4LjExMzMgNTEuNzYyIDYwLjkzOCA1MS43NjIgNjQuNjYyQzUxLjc2MiA2OC4zMzUzIDUwLjQ1NzMgNzEuMTQ3MyA0Ny44NDggNzMuMDk4QzQ1LjIzODcgNzUuMDIzMyA0MS41NCA3NS45ODYgMzYuNzUyIDc1Ljk4NkgzNS44MDJaTTg1Ljk1MDQgNTEuNFY3OEg3Ny41OTA0VjYxLjIwNEw2NC45NzQ0IDc4SDU2LjEyMDRWNTEuNEg2NC40ODA0VjY4LjI3Mkw3Ny4xMzQ0IDUxLjRIODUuOTUwNFpNMTA3LjQ3OCA1OC40NjhWNzhIOTkuMTE4M1Y1OC40NjhIODkuNjU2M1Y1MS40SDExNi45NFY1OC40NjhIMTA3LjQ3OFoiIGZpbGw9IndoaXRlIiBzdHlsZT0iZmlsbDp3aGl0ZTtmaWxsLW9wYWNpdHk6MTsiLz4KPC9zdmc+Cg==">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF4F7;color:#000;font-size:14px}
+.hdr{background:#fff;border-bottom:2px solid #E1E7ED}
+.hdr-in{max-width:980px;margin:0 auto;padding:15px 40px;display:flex;align-items:center;gap:16px}
+.fit{background:#FE5000;border-radius:8px;padding:0 12px;height:42px;display:flex;align-items:center}
+.fit svg{height:30px;width:auto}
+.tb{border-radius:8px;overflow:hidden;height:42px;display:flex}
+.x{font-size:20px;color:#C9D0D7}
+.hdr-t{margin-left:auto;font-size:13px;color:#586066;font-weight:600}
+.hdr-t a{color:#0762C8;text-decoration:none}
+.main{max-width:980px;margin:0 auto;padding:24px 40px 60px}
+.card{background:#fff;border:1px solid #E1E7ED;border-radius:16px;padding:20px 22px;margin-bottom:16px}
+.ct{font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.nb{width:24px;height:24px;border-radius:50%;background:#FE5000;color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.cd{font-size:12px;color:#838A90;margin:0 0 16px 34px;line-height:1.5}
+.row{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.lbl{width:150px;font-size:13px;color:#586066}
+input[type=text],input[type=password]{flex:1;min-width:220px;border:1px solid #C9D0D7;border-radius:8px;padding:10px 12px;font-size:13px;background:#FAFAFA}
+input:focus{outline:none;border-color:#FE5000;background:#fff}
+.hint{font-size:11px;color:#9FA5AB;margin:-4px 0 10px 160px}
+.hint a{color:#0762C8}
+.btn{border:none;border-radius:8px;padding:11px 20px;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.bp{background:#FE5000;color:#fff}.bp:hover{background:#FE6100}.bp:disabled{background:#FFA981;cursor:not-allowed}
+.bs{background:#E1E7ED;color:#000}.bs:hover{background:#DAE0E6}
+.btn.sm{padding:9px 12px;font-size:12px;font-weight:600}
+.st{display:flex;align-items:center;gap:8px;font-size:13px;color:#586066;margin-top:10px}
+.dot{width:9px;height:9px;border-radius:50%;background:#C9D0D7;flex:none}
+.dot.ok{background:#0762C8}.dot.err{background:#E1324C}.dot.wait{background:#FE5000;animation:pl 1s infinite}
+@keyframes pl{50%{opacity:.35}}
+.drop{border:2px dashed #C9D0D7;border-radius:12px;padding:30px 20px;text-align:center;cursor:pointer;background:#FAFAFA;transition:.15s}
+.drop:hover,.drop.over{border-color:#FE5000;background:#FFF1EB}
+.drop b{color:#FE5000}.drop .ic{font-size:30px;margin-bottom:6px}
+.drop .s{font-size:12px;color:#9FA5AB;margin-top:4px}
+.files{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.fr{display:flex;gap:10px;align-items:center;background:#F0F4F7;border-radius:8px;padding:9px 12px;font-size:12px}
+.fr .fn{font-weight:600;min-width:160px;word-break:break-all}.fr .ok{color:#0762C8}.fr .er{color:#E1324C}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#F0F4F7;color:#586066;font-weight:700;padding:8px 6px;text-align:right;white-space:nowrap;font-size:11px}
+th:first-child{text-align:left;border-radius:8px 0 0 8px}th:last-child{border-radius:0 8px 8px 0}
+td{padding:4px 4px;border-bottom:1px solid #F0F4F7;text-align:right}
+td.m{text-align:left;font-weight:700;padding-left:8px;white-space:nowrap}
+td.dt{font-size:11px;color:#838A90;text-align:left;white-space:nowrap;padding-left:8px}
+td input{width:100%;min-width:72px;border:1px solid transparent;border-radius:6px;padding:5px 6px;text-align:right;font-size:12px;background:transparent}
+td input:hover{border-color:#E1E7ED}td input:focus{outline:none;border-color:#FE5000;background:#FFF1EB}
+td input.ed{border-color:#0762C8;background:#E5F2FF}
+.del{border:none;background:none;color:#9FA5AB;cursor:pointer;font-size:15px;padding:2px 6px;border-radius:6px}.del:hover{color:#E1324C;background:#FFF2F3}
+.tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;background:#FFF1EB;color:#FE5000;margin-left:4px}
+.empty{text-align:center;color:#9FA5AB;padding:24px!important}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:14px}
+.sc{background:#F0F4F7;border-radius:10px;padding:10px 12px}.sv{font-size:18px;font-weight:700;color:#000}.sl{font-size:11px;color:#838A90;margin-top:2px}
+.bar{height:4px;background:#E1E7ED;border-radius:2px;margin-top:14px;overflow:hidden}.bf{height:100%;width:0;background:#FE5000;transition:width .3s}
+.log{margin-top:12px;background:#F0F4F7;border-radius:8px;padding:12px 14px;font-family:ui-monospace,Consolas,monospace;font-size:12px;line-height:1.7;display:none;max-height:200px;overflow:auto}
+.log .ok{color:#0762C8}.log .er{color:#E1324C}.log .in{color:#586066}
+@media(max-width:700px){.hdr-in,.main{padding-left:16px;padding-right:16px}.lbl{width:100%}.hint{margin-left:0}.cd{margin-left:0}.hdr-t{display:none}.fit svg{height:24px}}
+</style>
+</head>
+<body>
+<div class="hdr"><div class="hdr-in">
+  <div class="fit"><svg width="202" height="42" viewBox="0 0 202 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M45.6707 17.3727V30.7382H38.3483V17.3727H31.4158V11.2443H52.5789V17.3727H45.6707Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M21.7791 11.2443H29.1015V30.7382H21.7791V11.2443Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M9.27222 24.5246V30.7382H2.2605V11.2443H19.1837V16.9219H9.27222V18.847H18.3795V24.5246H9.27222Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M107.29 16.9219V20.6014H110.464C111.505 20.6014 112.255 20.4552 112.724 20.1567C113.187 19.8582 113.418 19.3952 113.418 18.7617C113.418 18.0733 113.187 17.5981 112.724 17.324C112.255 17.0559 111.432 16.9219 110.244 16.9219H107.29ZM100.156 30.7382V11.2443H111.189C114.588 11.2443 117.055 11.8291 118.596 13.011C120.138 14.1867 120.911 16.0021 120.911 18.4571C120.911 21.369 119.668 23.4097 117.177 24.5855L122.276 30.7382H114.283L110.409 25.7247H107.485V30.7382H100.156Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M199.594 30.7382H181.824V11.2443H199.594V16.8976H189.152V18.4266H198.315V23.5499H189.152V25.085H199.594V30.7382Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M178.985 24.001V30.1538C176.981 30.8239 174.52 31.1589 171.602 31.1589C167.057 31.1589 163.737 30.3122 161.66 28.6247C159.576 26.9312 158.541 24.4701 158.541 21.2414C158.541 17.8239 159.601 15.2348 161.727 13.4682C163.853 11.7077 167.319 10.8243 172.132 10.8243C173.935 10.8243 176.207 11.1107 178.955 11.6894V17.7873C177.005 17.2269 175.123 16.9527 173.301 16.9527C170.779 16.9527 168.982 17.2269 167.91 17.7873C166.844 18.3417 166.308 19.4138 166.308 20.9916C166.308 22.4781 166.85 23.5198 167.922 24.1229C169 24.7259 170.798 25.0305 173.301 25.0305C175.141 25.0305 177.036 24.6833 178.985 24.001Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M148.374 11.2443H155.696V30.7382H148.374V11.2443Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M146.534 11.2443L139.016 30.7382H129.209L121.716 11.2443H129.684L134.332 24.8048L139.071 11.2443H146.534Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M97.2322 25.085V30.7382H79.1333V11.2443H97.2322V16.8976H86.4557V18.4266H95.6178V23.5499H86.4557V25.085H97.2322Z" fill="white" style="fill:white;fill-opacity:1;"/>
+<path d="M58.0431 30.0685V24.5005C58.6766 24.799 59.6635 25.0671 60.9976 25.3047C62.3317 25.5483 63.745 25.6702 65.2315 25.6702C66.4742 25.6702 67.3453 25.6154 67.8327 25.5057C68.3261 25.39 68.5759 25.1767 68.5759 24.86C68.5759 24.7686 68.5576 24.6894 68.5332 24.6224C68.5028 24.5615 68.4419 24.5005 68.3383 24.4457C68.2347 24.3909 68.1312 24.3482 68.0337 24.3178C67.9301 24.2934 67.7718 24.2508 67.5585 24.2081C67.3453 24.1594 67.1321 24.1168 66.9189 24.0802C66.7057 24.0437 66.4133 23.9888 66.0539 23.9157C65.6944 23.8426 65.3411 23.7695 65.0122 23.6903L64.0618 23.4954C61.7774 23.0507 60.1509 22.2831 59.1762 21.1866C58.2015 20.09 57.7141 18.8168 57.7141 17.3731C57.7141 15.2348 58.5487 13.6083 60.2179 12.4935C61.887 11.3787 64.3116 10.8243 67.4854 10.8243C70.6837 10.8243 73.2544 11.1289 75.2038 11.7442V17.2025C72.9376 16.6847 70.6106 16.4228 68.2104 16.4228C67.0773 16.4228 66.2793 16.4776 65.8041 16.5872C65.3289 16.703 65.0913 16.8979 65.0913 17.172C65.0913 17.4523 65.2741 17.6594 65.6335 17.7873C65.999 17.9153 66.663 18.0615 67.6438 18.2198C68.6185 18.3782 69.4348 18.5366 70.1049 18.7072L71.1345 18.957C72.2493 19.2189 73.1813 19.554 73.9367 19.9743C74.686 20.3946 75.2525 20.8637 75.6363 21.3937C76.014 21.9237 76.2821 22.4415 76.4283 22.941C76.5745 23.4406 76.6537 24.001 76.6537 24.6102C76.6537 26.7484 75.7399 28.375 73.9062 29.4837C72.0787 30.5985 69.5018 31.1589 66.1757 31.1589C62.9287 31.1589 60.2179 30.7934 58.0431 30.0685Z" fill="white" style="fill:white;fill-opacity:1;"/>
+</svg></div><span class="x">×</span><div class="tb"><?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 9.03 Build 55587)  -->
+<svg height="42" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 499.9999695 196.2681274" style="enable-background:new 0 0 499.9999695 196.2681274;" xml:space="preserve">
+<g>
+	<path style="fill:#FFDD2D;" d="M477.9902954,196.2681274H22.0096741C9.8540668,196.2681274,0,186.4140625,0,174.2584534V22.0096741
+		C0,9.8540668,9.8540668,0,22.0096741,0h455.9806213c12.1556091,0,22.0096741,9.8540668,22.0096741,22.0096741v152.2487793
+		C499.9999695,186.4140625,490.1459045,196.2681274,477.9902954,196.2681274z"/>
+	<g>
+		<g>
+			<path style="fill:#FFFFFF;" d="M66.0862656,47.6912079h110.0571976v55.3507462
+				c0,14.1894989-7.5696869,27.3015213-19.8574524,34.3970108l-35.1711197,20.3093109l-35.1710587-20.3093109
+				c-12.2880173-7.0954895-19.8575668-20.2075119-19.8575668-34.3970108V47.6912079z"/>
+			<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#333333;" d="M96.2908859,76.8236847v17.2152481
+				c2.3541183-2.6583481,6.6343002-4.4575195,11.5281525-4.4575195h5.3182373v20.0125351
+				c0,5.3242645-1.4466171,9.9845352-3.5930328,12.5478897h23.1332169c-2.141922-2.5659561-3.5852356-7.220314-3.5852356-12.5377274
+				V89.5814133h5.3184814c4.8938446,0,9.1739044,1.7991714,11.5281372,4.4575195V76.8236847H96.2908859z"/>
+		</g>
+		<g>
+			<g>
+				<path style="fill:#333333;" d="M202.0926819,122.139534V76.8262787h46.0258331v10.3564301h-32.3014221v6.4747086h15.9888916
+					c11.3283081,0,19.7438812,2.5891037,19.7438812,14.2400818c0,11.6529236-8.4155731,14.2420349-19.7438812,14.2420349
+					H202.0926819z M215.8170929,104.0138397v7.7673187h16.0532379c4.6615601,0,5.7611389-0.9046249,5.7611389-3.8836594
+					c0-2.9770813-1.0995789-3.8836594-5.7611389-3.8836594H215.8170929z"/>
+				<path style="fill:#333333;" d="M327.5279846,105.3083954v16.8311386h-13.7243958V76.8262787h13.7243958v16.5074997h22.4616699
+					V76.8262787h13.7243958v45.3132553h-13.7243958v-16.8311386H327.5279846z"/>
+				<path style="fill:#333333;" d="M385.8263245,105.0490952v17.0904388h-13.7244263V76.8262787h13.7244263V93.721756h8.2205811
+					l14.306366-16.8954773h15.535614l-17.9307251,21.1671143v0.8422394l18.8373108,23.3039017h-17.025116l-13.7877808-17.0904388
+					H385.8263245z"/>
+			</g>
+			<g>
+				<path style="fill:#333333;" d="M291.9572144,115.4718018h-21.4273682l-2.3951111,6.6677322h-14.3707123l17.9316864-45.3132553
+					h19.8082275l17.866394,45.3132553H294.352356L291.9572144,115.4718018z M288.2675476,105.1153793l-6.3440857-17.8663864
+					h-1.165863l-6.4727783,17.8663864H288.2675476z"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg></div>
+  <div class="hdr-t">Обновление данных · <a href="./">открыть дашборд →</a></div>
+</div></div>
+
+<div class="main">
+  <div class="card">
+    <div class="ct"><span class="nb">1</span>Подключение к GitHub</div>
+    <div class="cd">Загружает текущий <b>data.json</b> из репозитория. Без этого шага сохранение недоступно — чтобы случайно не затереть накопленные данные.</div>
+    <div class="row"><span class="lbl">Токен GitHub</span><input type="password" id="tok" placeholder="ghp_… или github_pat_…" autocomplete="off"></div>
+    <div class="hint">Нужны права на запись в репозиторий. <a href="https://github.com/settings/tokens/new?scopes=repo&description=fitservice-dashboard" target="_blank">Создать токен →</a> Вводите только здесь, не пересылайте в чатах.</div>
+    <div class="row"><span class="lbl">Репозиторий</span><input type="text" id="repo" value="tanchikpet/fitservice-tbank-dashboard"></div>
+    <div class="row"><span class="lbl">Пароль дашборда</span><input type="password" id="pw" placeholder="не короче 10 символов" autocomplete="new-password">
+      <button class="btn bs sm" onclick="togglePw()">👁</button><button class="btn bs sm" onclick="genPw()">Сгенерировать</button></div>
+    <div class="hint">Этим паролем зашифрованы данные. Его вы сообщаете руководителям и менеджерам. Чтобы сменить пароль — введите новый перед сохранением.</div>
+    <div class="row"><span class="lbl">Ключ обезличивания</span><input type="password" id="anon" readonly>
+      <button class="btn bs sm" onclick="toggleKey()">👁</button><button class="btn bs sm" onclick="copyKey()">Копировать</button><button class="btn bs sm" onclick="pasteKey()">Вставить свой</button></div>
+    <div class="hint">Превращает телефоны клиентов в коды. Хранится только в этом браузере и <b>никуда не отправляется</b>. Сохраните его в надёжном месте: с другим ключом новые месяцы не свяжутся со старыми клиентами.</div>
+    <button class="btn bs" onclick="loadRemote()">↓ Загрузить текущие данные</button>
+    <div class="st"><span class="dot" id="dot"></span><span id="stt">Не подключено</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="nb">2</span>Выгрузки из 1С</div>
+    <div class="cd">Перетащите один или сразу несколько файлов <b>CSV</b> или <b>XLSX</b>. Тип определяется автоматически по строке «Период»:<br>
+      • <b>за месяц</b> (01.01.2026 – 31.01.2026) — итоги месяца, станции, клиенты и разбивка по дням;<br>
+      • <b>за день</b> (01.09.2026 – 01.09.2026) — для текущего месяца, пока он не закрыт. Повторная загрузка того же дня заменяет его, а не дублирует.</div>
+    <div class="drop" id="drop" onclick="document.getElementById('fi').click()">
+      <div class="ic">📂</div>
+      <div>Перетащите файлы сюда или <b>выберите на компьютере</b></div>
+      <div class="s">Январь_2026.csv, 01_09_2026.csv, … · можно выделить сразу все · старый data.json тоже можно перетащить сюда для переноса</div>
+      <input type="file" id="fi" accept=".csv,.xlsx,.xls,.json" multiple hidden>
+    </div>
+    <div class="files" id="files"></div>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="nb">3</span>Данные по месяцам</div>
+    <div class="cd">Проверьте цифры. <b>Закуп ЗЧ</b> и <b>Комиссию</b> вносите вручную — их нет в выгрузке 1С. <span class="tag">предв.</span> — месяц собран из дневных файлов и ещё не закрыт.</div>
+    <div class="sum" id="sum"></div>
+    <div class="tw"><table>
+      <thead><tr><th>Месяц</th><th>Записей</th><th>НК</th><th>СК</th><th>ЗН НК</th><th>ЗН СК</th><th>Выручка ₽</th><th>Закуп ЗЧ ₽</th><th>Комиссия ₽</th><th style="text-align:left">Детализация</th><th></th></tr></thead>
+      <tbody id="tb"><tr><td colspan="11" class="empty">Сначала загрузите текущие данные (шаг 1)</td></tr></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="nb">4</span>Мой план</div>
+    <div class="cd">План по записям и заказ-нарядам. Хранится <b>только в этом браузере</b> и в дашборд не попадает — его видите только вы. Изменения сохраняются сразу, кнопку «Сохранить» нажимать не нужно.</div>
+    <div class="tw"><table>
+      <thead><tr><th>Месяц</th><th>План записей</th><th>Факт записей</th><th>Выполнение</th><th>План ЗН</th><th>Факт ЗН</th><th>Выполнение</th></tr></thead>
+      <tbody id="pb"><tr><td colspan="7" class="empty">Сначала загрузите текущие данные (шаг 1)</td></tr></tbody>
+    </table></div>
+    <button class="btn bs" style="margin-top:12px" onclick="addPlanYear()">+ Добавить следующий год</button>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="nb">5</span>Сохранить</div>
+    <div class="cd">Шифрует данные паролем и записывает <b>data.enc.json</b> в репозиторий. Имён и телефонов в нём нет. Дашборд подхватит данные через 1–2 минуты.</div>
+    <button class="btn bp" id="save" onclick="save()" disabled>🚀 Сохранить на GitHub</button>
+    <div class="bar"><div class="bf" id="bf"></div></div>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+
+<div class="main" style="padding-top:0">
+  <div class="card">
+    <div class="ct">🔎 Найти клиента по телефону</div>
+    <div class="cd" style="margin-left:0">В дашборде клиенты показаны кодами. Введите телефон — получите код, по которому клиента можно найти во вкладке «Клиенты». Работает только с вашим ключом.</div>
+    <div class="row"><input type="text" id="lkPhone" placeholder="+7 900 000-00-00" oninput="lookup()"><span id="lkOut" style="font-weight:700;font-size:16px;min-width:140px"></span></div>
+  </div>
+</div>
+<script>
+// ===== Парсер выгрузок 1С (CSV / XLSX) — источник записи Tbank =====
+const P1C = (() => {
+  const MONTHS_RU = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+
+  function decodeBuffer(buf) {
+    try { return new TextDecoder('utf-8', { fatal: true }).decode(buf).replace(/^\uFEFF/, ''); }
+    catch (e) { return new TextDecoder('windows-1251').decode(buf); }
+  }
+
+  // CSV с учётом кавычек; разделитель определяется автоматически
+  function parseCSV(text) {
+    const firstLines = text.split(/\r?\n/).slice(0, 12).join('\n');
+    const sep = (firstLines.match(/;/g) || []).length >= (firstLines.match(/,/g) || []).length ? ';' : ',';
+    const rows = []; let row = [], cell = '', q = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (q) {
+        if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+        else cell += ch;
+      } else if (ch === '"') q = true;
+      else if (ch === sep) { row.push(cell); cell = ''; }
+      else if (ch === '\n') { row.push(cell.replace(/\r$/, '')); rows.push(row); row = []; cell = ''; }
+      else cell += ch;
+    }
+    if (cell || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+
+  const num = v => {
+    if (typeof v === 'number') return v;
+    const s = String(v == null ? '' : v).replace(/[\s\u00a0]/g, '').replace(',', '.');
+    const n = parseFloat(s); return isFinite(n) ? n : 0;
+  };
+  const txt = v => String(v == null ? '' : v).trim();
+  const isEvent = r => /^событие автосервис /i.test(txt(r[0]));
+
+  function monthLabel(period) { const [y, m] = period.split('-'); return MONTHS_RU[+m - 1] + "'" + y.slice(2); }
+
+  function parse(rows) {
+    // 1) Период
+    let from = null, to = null;
+    for (const r of rows.slice(0, 6)) {
+      const m = r.map(txt).join(' ').match(/(\d{2})\.(\d{2})\.(\d{4})\s*-\s*(\d{2})\.(\d{2})\.(\d{4})/);
+      if (m) { from = `${m[3]}-${m[2]}-${m[1]}`; to = `${m[6]}-${m[5]}-${m[4]}`; break; }
+    }
+    if (!from) throw new Error('Не найдена строка «Период: …» — проверьте, что это выгрузка из 1С');
+    let kind;
+    if (from === to) kind = 'day';
+    else if (from.slice(0, 7) === to.slice(0, 7)) kind = 'month';
+    else throw new Error(`Период ${from} – ${to} охватывает несколько месяцев. Выгружайте по одному месяцу или дню`);
+
+    // 2) Колонки — по подписям заголовка, с запасными значениями
+    const C = { ev: 5, rev: 6, nv: 8, ov: 10, znNv: 12, revNv: 13, znOv: 15, revOv: 16 };
+    for (const r of rows.slice(0, 12)) {
+      const t = r.map(x => txt(x).toLowerCase());
+      const iEv = t.indexOf('количество событий');
+      if (iEv < 0) continue;
+      C.ev = iEv;
+      const iRev = t.indexOf('всего сумма по документу'); if (iRev >= 0) C.rev = iRev;
+      const nk = t.map((x, i) => x === 'новые клиенты' ? i : -1).filter(i => i >= 0);
+      const sk = t.map((x, i) => x === 'старые клиенты' ? i : -1).filter(i => i >= 0);
+      if (nk.length >= 2 && sk.length >= 2) {
+        C.nv = nk[0]; C.ov = sk[0]; C.znNv = nk[1]; C.revNv = nk[1] + 1; C.znOv = sk[1]; C.revOv = sk[1] + 1;
+      }
+      break;
+    }
+    const metrics = r => {
+      const m = {
+        events: num(r[C.ev]), nv: num(r[C.nv]), ov: num(r[C.ov]),
+        zn_nv: num(r[C.znNv]), rev_nv: num(r[C.revNv]), zn_ov: num(r[C.znOv]), rev_ov: num(r[C.revOv]),
+      };
+      m.zn = m.zn_nv + m.zn_ov;
+      m.rev = Math.round((m.rev_nv + m.rev_ov) || num(r[C.rev]));
+      return m;
+    };
+
+    // 3) Источники записи (Tbank, tbank.sh-fix …) и общий итог
+    let srcNames = [];
+    for (const r of rows.slice(0, 6)) {
+      const m = r.map(txt).join(' ').match(/в списке\s*"+([^"]+)"/i);
+      if (m) { srcNames = m[1].split(/[;,]/).map(x => x.trim().toLowerCase()).filter(Boolean); break; }
+    }
+    const isSrc = r => { const n = txt(r[0]).toLowerCase(); return srcNames.includes(n) || /^tbank/.test(n); };
+    const iFirst = rows.findIndex(isSrc);
+    if (iFirst < 0) throw new Error('Не найдена строка источника «Tbank» — проверьте фильтр по источнику записи');
+    let iEnd = rows.findIndex((r, i) => i > iFirst && txt(r[0]).toLowerCase() === 'итого');
+    if (iEnd < 0) iEnd = rows.length;
+    const sources = [];
+    for (let i = iFirst; i < iEnd; i++) if (isSrc(rows[i])) sources.push({ name: txt(rows[i][0]), ...metrics(rows[i]) });
+    let totals;
+    if (iEnd < rows.length) totals = metrics(rows[iEnd]);
+    else {
+      totals = { events: 0, nv: 0, ov: 0, zn_nv: 0, rev_nv: 0, zn_ov: 0, rev_ov: 0, zn: 0, rev: 0 };
+      sources.forEach(sr => Object.keys(totals).forEach(k => totals[k] += sr[k]));
+    }
+
+    // 4) Иерархия Источник → Город → СТО → Клиент → События (уровень — по следующей строке)
+    const body = [];
+    for (let i = iFirst; i < iEnd; i++) { const r = rows[i]; if (txt(r[0])) body.push(r); }
+    const isClient = body.map((r, i) => !isSrc(r) && !isEvent(r) && i + 1 < body.length && isEvent(body[i + 1]));
+    const hasClients = isClient.some(Boolean);
+    // В агрегированной выгрузке (без клиентов) станцию узнаём по запятой в адресе
+    const isStation = body.map((r, i) => hasClients
+      ? (!isSrc(r) && !isEvent(r) && !isClient[i] && i + 1 < body.length && isClient[i + 1])
+      : !isSrc(r) && txt(r[0]).includes(','));
+
+    const cities = [], stations = [], clients = [], events = [];
+    let src = sources.length ? sources[0].name : 'Tbank', city = '', station = '', client = null;
+    body.forEach((r, i) => {
+      const name = txt(r[0]);
+      if (isSrc(r)) { src = name; city = ''; station = ''; client = null; return; }
+      if (isEvent(r)) {
+        const dm = name.match(/от (\d{2})\.(\d{2})\.(\d{4})/);
+        const zn = num(r[C.znNv]) + num(r[C.znOv]);
+        events.push({
+          date: dm ? `${dm[3]}-${dm[2]}-${dm[1]}` : from, src, city, station,
+          phone: client ? client.phone : '', name: client ? client.name : '',
+          isNew: num(r[C.nv]) > 0 ? 1 : 0, zn: zn > 0 ? 1 : 0,
+          rev: Math.round(num(r[C.revNv]) + num(r[C.revOv])),
+        });
+        return;
+      }
+      if (isClient[i]) {
+        const phone = txt(r[3]).replace(/\D/g, '').slice(-10);
+        client = { phone, name };
+        clients.push({ phone, name, city, station, ...metrics(r) });
+      } else if (isStation[i]) {
+        station = name; client = null; stations.push({ city, station: name, ...metrics(r) });
+      } else {
+        city = name; station = ''; client = null; cities.push({ city: name, ...metrics(r) });
+      }
+    });
+
+    return { kind, from, to, period: from.slice(0, 7), label: monthLabel(from.slice(0, 7)), totals, sources, cities, stations, clients, events };
+  }
+
+  // ===== Хранилище data.json (v2) =====
+  // detail[period] = { st:[[city,station]], cl:[[phone,name]], ev:[[day,stIdx,clIdx,isNew,zn,rev]], agg:[[stIdx,events,nv,ov,zn_nv,zn_ov,rev]], src }
+  function emptyData() { return { version: '2.0', updated: '', monthly: [], detail: {}, plan: {} }; }
+  const srcArr = t => [t.events, t.nv, t.ov, t.zn_nv, t.zn_ov, Math.round(t.rev)];
+
+  function monthRecord(period, t, keep) {
+    const zn = t.zn_nv + t.zn_ov;
+    return {
+      period, label: monthLabel(period),
+      events: t.events, nv: t.nv, ov: t.ov, zn, zn_nv: t.zn_nv, zn_ov: t.zn_ov, rev: Math.round(t.rev),
+      parts: keep ? keep.parts || 0 : 0, comm: keep ? keep.comm || 0 : 0,
+      // поля в формате дашборда
+      new_visits: t.nv, old_visits: t.ov, zn_total: zn, zn_new: t.zn_nv, zn_old: t.zn_ov,
+      revenue: Math.round(t.rev), rev_new: Math.round(t.rev_nv || 0), rev_old: Math.round(t.rev_ov || 0),
+      partial: !!t.partial,
+      src: t.src || (keep && keep.src) || {},
+    };
+  }
+
+  function normalize(data) {
+    const d = data && typeof data === 'object' ? data : {};
+    const out = emptyData();
+    out.updated = d.updated || '';
+    out.monthly = (d.monthly || []).map(m => monthRecord(m.period, {
+      events: m.events || 0, nv: m.nv ?? m.new_visits ?? 0, ov: m.ov ?? m.old_visits ?? 0,
+      zn_nv: m.zn_nv ?? m.zn_new ?? 0, zn_ov: m.zn_ov ?? m.zn_old ?? 0,
+      rev: m.rev ?? m.revenue ?? 0, rev_nv: m.rev_new || 0, rev_ov: m.rev_old || 0, partial: m.partial, src: m.src,
+    }, m));
+    out.detail = (d.detail && typeof d.detail === 'object' && !Array.isArray(d.detail)) ? d.detail : {};
+    out.plan = (d.plan && typeof d.plan === 'object' && !Array.isArray(d.plan)) ? d.plan : {};
+    return out;
+  }
+
+  function dictIndex(list, key, cache) {
+    if (!cache.map) { cache.map = new Map(list.map((x, i) => [x.join('\u0001'), i])); }
+    const k = key.join('\u0001');
+    if (cache.map.has(k)) return cache.map.get(k);
+    list.push(key); cache.map.set(k, list.length - 1); return list.length - 1;
+  }
+
+  function sumEvents(det) {
+    const z0 = () => ({ events: 0, nv: 0, ov: 0, zn_nv: 0, zn_ov: 0, rev: 0, rev_nv: 0, rev_ov: 0 });
+    const t = z0(), bySrc = {};
+    det.ev.forEach(([, , , n, z, r, si]) => {
+      const name = (det.srcs || [])[si || 0] || 'Tbank';
+      for (const x of [t, bySrc[name] = bySrc[name] || z0()]) {
+        x.events++; if (n) x.nv++; else x.ov++;
+        if (z) { if (n) x.zn_nv++; else x.zn_ov++; }
+        x.rev += r; if (n) x.rev_nv += r; else x.rev_ov += r;
+      }
+    });
+    t.src = Object.fromEntries(Object.entries(bySrc).map(([k, v]) => [k, srcArr(v)]));
+    return t;
+  }
+
+  function upsertMonth(data, rec) {
+    const i = data.monthly.findIndex(m => m.period === rec.period);
+    if (i >= 0) data.monthly[i] = rec; else data.monthly.push(rec);
+    data.monthly.sort((a, b) => a.period.localeCompare(b.period));
+  }
+
+  // Применить разобранный файл к данным. Возвращает текст-описание результата.
+  function apply(data, p) {
+    const old = data.monthly.find(m => m.period === p.period);
+    if (p.kind === 'month') {
+      const tot = { ...p.totals, src: Object.fromEntries(p.sources.map(sr => [sr.name, srcArr(sr)])) };
+      upsertMonth(data, monthRecord(p.period, tot, old));
+      const det = { src: 'month', srcs: [], st: [], cl: [], ev: [], agg: [] };
+      const sc = {}, cc = {};
+      const si = n => { let i = det.srcs.indexOf(n); if (i < 0) { det.srcs.push(n); i = det.srcs.length - 1; } return i; };
+      if (p.events.length) {
+        p.events.forEach(e => det.ev.push([+e.date.slice(8, 10), dictIndex(det.st, [e.city, e.station], sc),
+          dictIndex(det.cl, [e.phone, e.name], cc), e.isNew, e.zn, e.rev, si(e.src)]));
+      } else {
+        p.stations.forEach(s => det.agg.push([dictIndex(det.st, [s.city, s.station], sc),
+          s.events, s.nv, s.ov, s.zn_nv, s.zn_ov, Math.round(s.rev)]));
+      }
+      data.detail[p.period] = det;
+      return `месяц ${p.label}: ${p.totals.events.toLocaleString('ru')} записей, ${p.totals.zn} ЗН` +
+        (p.events.length ? `, ${det.cl.length.toLocaleString('ru')} клиентов, ${new Set(det.ev.map(e => e[0])).size} дн.` : ', без детализации по клиентам');
+    }
+    // день
+    const day = +p.from.slice(8, 10);
+    const det = data.detail[p.period] || { src: 'days', srcs: [], st: [], cl: [], ev: [], agg: [] };
+    det.srcs = det.srcs || [];
+    det.ev = det.ev.filter(e => e[0] !== day);
+    const sc = {}, cc = {};
+    const si = n => { let i = det.srcs.indexOf(n); if (i < 0) { det.srcs.push(n); i = det.srcs.length - 1; } return i; };
+    p.events.forEach(e => det.ev.push([day, dictIndex(det.st, [e.city, e.station], sc),
+      dictIndex(det.cl, [e.phone, e.name], cc), e.isNew, e.zn, e.rev, si(e.src)]));
+    det.ev.sort((a, b) => a[0] - b[0]);
+    data.detail[p.period] = det;
+    if (!old || old.partial) {
+      const t = sumEvents(det); t.partial = true;
+      upsertMonth(data, monthRecord(p.period, t, old));
+    }
+    return `день ${p.from.split('-').reverse().join('.')}: ${p.totals.events} записей, ${p.totals.zn} ЗН, ${p.clients.length} клиентов`;
+  }
+
+  function serialize(data) {
+    data.version = '2.0';
+    data.updated = new Date().toISOString().slice(0, 10);
+    return JSON.stringify(data);
+  }
+
+  // ===== Расчёты для дашборда =====
+  // Станции за период: [{city,station,events,nv,ov,zn_nv,zn_ov,zn,rev,days:{d:count}}]
+  function stationsOf(det) {
+    const rows = det.st.map(([city, station]) => ({ city, station, events: 0, nv: 0, ov: 0, zn_nv: 0, zn_ov: 0, zn: 0, rev: 0, days: {} }));
+    if (det.ev.length) {
+      det.ev.forEach(([d, s, , n, z, r]) => {
+        const x = rows[s]; x.events++; if (n) x.nv++; else x.ov++;
+        if (z) { x.zn++; if (n) x.zn_nv++; else x.zn_ov++; }
+        x.rev += r; x.days[d] = (x.days[d] || 0) + 1;
+      });
+    } else {
+      (det.agg || []).forEach(([s, ev, nv, ov, znn, zno, r]) => {
+        Object.assign(rows[s], { events: ev, nv, ov, zn_nv: znn, zn_ov: zno, zn: znn + zno, rev: r });
+      });
+    }
+    return rows.filter(x => x.events > 0);
+  }
+
+  return { decodeBuffer, parseCSV, parse, num, monthLabel, emptyData, normalize, apply, serialize, stationsOf, sumEvents };
+})();
+if (typeof module !== 'undefined') module.exports = P1C;
+
+// ===== Шифрование данных дашборда и обезличивание клиентов =====
+const SEC = (() => {
+  const te = new TextEncoder(), td = new TextDecoder();
+  const b64 = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+  const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const rnd = n => crypto.getRandomValues(new Uint8Array(n));
+  const ITER = 310000;
+
+  async function deriveKey(password, salt, iter) {
+    const base = await crypto.subtle.importKey('raw', te.encode(password), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: iter, hash: 'SHA-256' }, base,
+      { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  }
+  // Зашифровать текст → JSON-конверт (AES-256-GCM, ключ из пароля через PBKDF2)
+  async function encrypt(text, password) {
+    const salt = rnd(16), iv = rnd(12);
+    const key = await deriveKey(password, salt, ITER);
+    const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, te.encode(text)));
+    return JSON.stringify({ format: 'fit-enc-1', kdf: 'PBKDF2-SHA256', iter: ITER, salt: b64(salt), iv: b64(iv), data: b64(ct) });
+  }
+  async function decrypt(envelope, password) {
+    const e = typeof envelope === 'string' ? JSON.parse(envelope) : envelope;
+    if (!e || e.format !== 'fit-enc-1') throw new Error('файл данных в неизвестном формате');
+    const key = await deriveKey(password, unb64(e.salt), e.iter);
+    try { return td.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(e.iv) }, key, unb64(e.data))); }
+    catch (x) { throw new Error('неверный пароль'); }
+  }
+
+  // Код клиента: HMAC-SHA256(телефон, секретный ключ). Без ключа телефон по коду не восстановить.
+  const isCode = s => /^K[0-9A-F]{9}$/.test(s || '');
+  async function coder(secret) {
+    const key = await crypto.subtle.importKey('raw', te.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const cache = new Map();
+    return async (phone, name) => {
+      if (isCode(phone)) return phone;
+      const digits = String(phone || '').replace(/\D/g, '').slice(-10);
+      const id = digits ? 'p:' + digits : 'n:' + String(name || '').trim().toLowerCase();
+      if (cache.has(id)) return cache.get(id);
+      const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, te.encode(id)));
+      const code = 'K' + [...sig.slice(0, 5)].map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase().slice(0, 9);
+      cache.set(id, code); return code;
+    };
+  }
+  // Обезличить разобранный файл 1С (события и клиенты)
+  async function anonymizeParsed(p, codeOf) {
+    for (const e of p.events) { e.phone = await codeOf(e.phone, e.name); e.name = ''; }
+    for (const c of p.clients) { c.phone = await codeOf(c.phone, c.name); c.name = ''; }
+    return p;
+  }
+  // Обезличить уже сохранённые данные (миграция старого data.json)
+  async function anonymizeData(data, codeOf) {
+    let n = 0;
+    for (const det of Object.values(data.detail || {})) {
+      if (!det.cl) continue;
+      const map = new Map(), cl = [];
+      const remap = [];
+      for (const [ph, nm] of det.cl) {
+        const code = await codeOf(ph, nm); if (!isCode(ph) || nm) n++;
+        if (!map.has(code)) { map.set(code, cl.length); cl.push([code, '']); }
+        remap.push(map.get(code));
+      }
+      det.cl = cl;
+      (det.ev || []).forEach(e => { e[2] = remap[e[2]]; });
+    }
+    data.anon = true;
+    return n;
+  }
+  const newSecret = () => b64(rnd(24)).replace(/[+/=]/g, '').slice(0, 28);
+  function newPassword() {
+    const A = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789', r = rnd(16);
+    return [...r].map(x => A[x % A.length]).join('').replace(/(.{4})(?=.)/g, '$1-');
+  }
+  return { encrypt, decrypt, coder, isCode, anonymizeParsed, anonymizeData, newSecret, newPassword };
+})();
+if (typeof module !== 'undefined') module.exports = SEC;
+
+</script>
+<script>
+let DATA = null, LOADED = false, DIRTY = false, LOADED_PW = null, LEGACY_SHA = null, CODE_OF = null;
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n || 0).toLocaleString('ru');
+const FIELDS = ['events','nv','ov','zn_nv','zn_ov','rev','parts','comm'];
+
+// ---- Пароль и ключ обезличивания ----
+function togglePw() { const i = $('pw'); i.type = i.type === 'password' ? 'text' : 'password'; }
+function genPw() { $('pw').value = SEC.newPassword(); $('pw').type = 'text'; }
+function toggleKey() { const i = $('anon'); i.type = i.type === 'password' ? 'text' : 'password'; }
+async function copyKey() { try { await navigator.clipboard.writeText($('anon').value); alert('Ключ скопирован. Сохраните его в надёжном месте.'); } catch (e) { toggleKey(); } }
+async function pasteKey() {
+  const k = prompt('Вставьте ранее сохранённый ключ обезличивания:'); if (!k || !k.trim()) return;
+  if (!confirm('Заменить ключ? Клиенты из новых файлов получат коды по этому ключу.')) return;
+  localStorage.setItem('fitAnonKey', k.trim()); await initKey();
+}
+async function initKey() {
+  let k = localStorage.getItem('fitAnonKey');
+  if (!k) { k = SEC.newSecret(); localStorage.setItem('fitAnonKey', k); }
+  $('anon').value = k; CODE_OF = await SEC.coder(k); lookup();
+}
+async function lookup() {
+  const v = $('lkPhone').value.replace(/\D/g, '');
+  $('lkOut').textContent = v.length >= 10 && CODE_OF ? '#' + (await CODE_OF(v)).slice(1) : '';
+}
+initKey();
+
+function status(t, msg) { $('dot').className = 'dot ' + t; $('stt').innerHTML = msg; }
+function log(t, msg) { const l = $('log'); l.style.display = 'block'; l.insertAdjacentHTML('beforeend', `<div class="${t}">${new Date().toLocaleTimeString('ru')}  ${msg}</div>`); l.scrollTop = l.scrollHeight; }
+function bar(p) { $('bf').style.width = p + '%'; }
+function markDirty() { DIRTY = true; $('save').disabled = !LOADED; }
+
+// ---- GitHub ----
+function gh(path, opt = {}) {
+  const repo = $('repo').value.trim(), tok = $('tok').value.trim();
+  return fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+    ...opt, cache: 'no-store',
+    headers: { 'Authorization': 'Bearer ' + tok, 'Accept': opt.accept || 'application/vnd.github+json', ...(opt.body ? { 'Content-Type': 'application/json' } : {}) },
+  });
+}
+async function ghError(r) { let m = ''; try { m = (await r.json()).message; } catch (e) {} 
+  if (r.status === 401) return 'токен неверный или истёк (401)';
+  if (r.status === 403) return 'у токена нет прав на этот репозиторий (403)';
+  if (r.status === 404) return 'репозиторий не найден или нет доступа (404)';
+  return `${r.status} ${m}`; }
+function b64encode(str) { const bytes = new TextEncoder().encode(str); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
+
+async function loadRemote() {
+  if (!$('tok').value.trim()) { status('err', 'Введите токен'); return; }
+  const pw = $('pw').value;
+  status('wait', 'Загружаю данные…');
+  try {
+    const chk = await gh('');
+    if (!chk.ok) throw new Error(await ghError(chk));
+    const files = await chk.json(), names = Array.isArray(files) ? files.map(f => f.name) : [];
+    const legacy = Array.isArray(files) ? files.find(f => f.name === 'data.json') : null;
+    LEGACY_SHA = legacy ? legacy.sha : null;
+    let note = '';
+    if (names.includes('data.enc.json')) {
+      if (!pw) { status('err', 'Введите пароль дашборда, чтобы расшифровать данные'); return; }
+      const r = await gh('data.enc.json', { accept: 'application/vnd.github.raw' });
+      if (!r.ok) throw new Error(await ghError(r));
+      DATA = P1C.normalize(JSON.parse(await SEC.decrypt(await r.text(), pw)));
+      LOADED_PW = pw;
+    } else if (legacy) {
+      const r = await gh('data.json', { accept: 'application/vnd.github.raw' });
+      if (!r.ok) throw new Error(await ghError(r));
+      DATA = P1C.normalize(JSON.parse(await r.text()));
+      note = ' · найден открытый data.json — при сохранении он будет зашифрован, а открытый файл удалён';
+    } else {
+      DATA = P1C.emptyData(); note = ' · данных пока нет — перетащите выгрузки 1С или старый data.json';
+    }
+    const n = await SEC.anonymizeData(DATA, CODE_OF);
+    if (n) { note += ` · обезличено записей клиентов: ${n}`; DIRTY = true; }
+    const pm = absorbPlan();
+    if (pm) note += ` · план (${pm} мес.) перенесён в этот браузер и будет убран из общего файла при сохранении`;
+    LOADED = true; $('save').disabled = false; render();
+    status('ok', `<b>Подключено.</b> ${DATA.monthly.length} мес. · детализация за ${Object.keys(DATA.detail).length} мес.` + (DATA.updated ? ` · обновлено ${DATA.updated}` : '') + note);
+  } catch (e) { status('err', 'Ошибка: ' + e.message); }
+}
+
+// ---- Файлы ----
+const drop = $('drop');
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('over'); handleFiles(e.dataTransfer.files); });
+$('fi').addEventListener('change', e => { handleFiles(e.target.files); e.target.value = ''; });
+
+async function importJSON(file) {
+  const obj = JSON.parse(P1C.decodeBuffer(new Uint8Array(await file.arrayBuffer())));
+  if (obj.format === 'fit-enc-1') throw new Error('это зашифрованный файл — он загружается кнопкой на шаге 1');
+  const imp = P1C.normalize(obj); await SEC.anonymizeData(imp, CODE_OF);
+  let added = 0;
+  imp.monthly.forEach(m => { if (!DATA.monthly.some(x => x.period === m.period)) { DATA.monthly.push(m); added++; } });
+  DATA.monthly.sort((a, b) => a.period.localeCompare(b.period));
+  Object.entries(imp.detail).forEach(([p, d]) => { if (!DATA.detail[p]) DATA.detail[p] = d; });
+  Object.entries(imp.plan || {}).forEach(([p, v]) => { if (!PLAN[p]) PLAN[p] = v; }); savePlan();
+  return `перенесено месяцев: ${added} (уже загруженные месяцы не заменялись), клиенты обезличены`;
+}
+
+async function readRows(file) {
+  const buf = await file.arrayBuffer();
+  if (/\.xlsx?$/i.test(file.name)) {
+    if (typeof XLSX === 'undefined') throw new Error('библиотека XLSX не загрузилась — сохраните файл как CSV');
+    const wb = XLSX.read(buf, { type: 'array' });
+    return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '', raw: true });
+  }
+  return P1C.parseCSV(P1C.decodeBuffer(new Uint8Array(buf)));
+}
+
+async function handleFiles(list) {
+  if (!DATA) DATA = P1C.emptyData();
+  const files = [...list].sort((a, b) => a.name.localeCompare(b.name));
+  // сначала месячные, потом дневные — чтобы день не перезаписался месяцем
+  const parsed = [];
+  for (const f of files) {
+    const row = document.createElement('div'); row.className = 'fr';
+    row.innerHTML = `<span class="fn">${f.name}</span><span>⏳ читаю…</span>`;
+    $('files').prepend(row);
+    try {
+      if (/\.json$/i.test(f.name)) { row.lastChild.outerHTML = `<span class="ok">✓ ${await importJSON(f)}</span>`; markDirty(); render(); continue; }
+      parsed.push({ f, row, p: await SEC.anonymizeParsed(P1C.parse(await readRows(f)), CODE_OF) });
+    }
+    catch (e) { row.lastChild.outerHTML = `<span class="er">✕ ${e.message}</span>`; }
+  }
+  parsed.sort((a, b) => (a.p.kind === 'month' ? 0 : 1) - (b.p.kind === 'month' ? 0 : 1) || a.p.from.localeCompare(b.p.from));
+  for (const { row, p } of parsed) {
+    try { row.lastChild.outerHTML = `<span class="ok">✓ ${P1C.apply(DATA, p)}</span>`; }
+    catch (e) { row.lastChild.outerHTML = `<span class="er">✕ ${e.message}</span>`; }
+  }
+  if (parsed.length) { markDirty(); render(); }
+  if (!LOADED && parsed.length) status('err', 'Файлы разобраны. <b>Загрузите текущие данные (шаг 1)</b>, иначе сохранение затрёт накопленное');
+}
+
+// ---- Таблица ----
+function detailText(p) {
+  const d = DATA.detail[p]; if (!d) return '—';
+  if (d.ev && d.ev.length) return `${new Set(d.ev.map(e => e[0])).size} дн. · ${fmt(d.cl.length)} клиентов`;
+  if (d.agg && d.agg.length) return `только станции (${d.st.length})`;
+  return '—';
+}
+function render() {
+  const ms = DATA.monthly;
+  if (!ms.length) { $('tb').innerHTML = '<tr><td colspan="11" class="empty">Нет данных — загрузите выгрузки из 1С (шаг 2)</td></tr>'; $('sum').innerHTML = ''; return; }
+  $('tb').innerHTML = ms.map((m, i) => `<tr>
+    <td class="m">${m.label}${m.partial ? '<span class="tag">предв.</span>' : ''}</td>
+    ${FIELDS.map(f => `<td><input data-i="${i}" data-f="${f}" value="${Math.round(m[f] || 0)}" inputmode="numeric"></td>`).join('')}
+    <td class="dt">${detailText(m.period)}</td>
+    <td><button class="del" title="Удалить месяц" onclick="delMonth(${i})">✕</button></td></tr>`).join('');
+  renderPlan();
+  $('tb').querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => {
+    const m = DATA.monthly[+inp.dataset.i], f = inp.dataset.f, v = P1C.num(inp.value);
+    m[f] = v; inp.classList.add('ed');
+    m.new_visits = m.nv; m.old_visits = m.ov; m.zn_new = m.zn_nv; m.zn_old = m.zn_ov;
+    m.zn = m.zn_total = m.zn_nv + m.zn_ov; m.revenue = m.rev;
+    markDirty(); renderSum(); renderPlan();
+  }));
+  renderSum();
+}
+
+// ---- План (только в этом браузере) ----
+let PLAN = {};
+try { PLAN = JSON.parse(localStorage.getItem('fitPlan') || '{}') || {}; } catch (e) { PLAN = {}; }
+function savePlan() { localStorage.setItem('fitPlan', JSON.stringify(PLAN)); }
+// План из общего файла данных переносим в браузер и убираем из файла
+function absorbPlan() {
+  const p = DATA && DATA.plan; if (!p || !Object.keys(p).length) return 0;
+  let n = 0; Object.entries(p).forEach(([k, v]) => { if (!PLAN[k]) { PLAN[k] = v; n++; } });
+  savePlan(); DATA.plan = {}; DIRTY = true; return Object.keys(p).length;
+}
+const pct = (f, p) => p ? Math.round(f / p * 100) : null;
+const pctCell = v => v == null ? '<td class="dt">—</td>' : `<td style="font-weight:700;color:${v >= 100 ? '#0762C8' : v >= 80 ? '#586066' : '#E1324C'}">${v}%</td>`;
+function planPeriods() {
+  const set = new Set(Object.keys(PLAN));
+  DATA.monthly.forEach(m => set.add(m.period));
+  const years = new Set([...set].map(p => p.slice(0, 4))); if (!years.size) years.add(String(new Date().getFullYear()));
+  years.forEach(y => { for (let i = 1; i <= 12; i++) set.add(y + '-' + String(i).padStart(2, '0')); });
+  return [...set].sort();
+}
+function renderPlan() {
+  if (!DATA) return;
+  $('pb').innerHTML = planPeriods().map(p => {
+    const pl = PLAN[p] || {}, f = DATA.monthly.find(m => m.period === p);
+    const fe = f ? f.events : null, fz = f ? f.zn_nv + f.zn_ov : null;
+    return `<tr><td class="m">${P1C.monthLabel(p)}</td>
+      <td><input data-p="${p}" data-k="events" value="${pl.events ?? ''}" placeholder="—" inputmode="numeric"></td>
+      <td>${fe == null ? '<span class="dt">—</span>' : fmt(fe)}</td>${fe == null ? '<td class="dt">—</td>' : pctCell(pct(fe, pl.events))}
+      <td><input data-p="${p}" data-k="zn" value="${pl.zn ?? ''}" placeholder="—" inputmode="numeric"></td>
+      <td>${fz == null ? '<span class="dt">—</span>' : fmt(fz)}</td>${fz == null ? '<td class="dt">—</td>' : pctCell(pct(fz, pl.zn))}</tr>`;
+  }).join('');
+  $('pb').querySelectorAll('input').forEach(inp => inp.addEventListener('change', () => {
+    const p = inp.dataset.p, k = inp.dataset.k, v = inp.value.trim();
+    PLAN[p] = PLAN[p] || {};
+    if (v === '') delete PLAN[p][k]; else PLAN[p][k] = P1C.num(v);
+    if (!Object.keys(PLAN[p]).length) delete PLAN[p];
+    savePlan(); renderPlan();
+  }));
+}
+function addPlanYear() {
+  if (!DATA) return;
+  const last = planPeriods().pop(), y = +last.slice(0, 4) + 1;
+  PLAN[y + '-01'] = PLAN[y + '-01'] || {}; savePlan();
+  renderPlan();
+}
+function renderSum() {
+  const ms = DATA.monthly, s = k => ms.reduce((a, m) => a + (m[k] || 0), 0);
+  const ev = s('events'), zn = s('zn_nv') + s('zn_ov');
+  $('sum').innerHTML = [[ms.length, 'месяцев'], [fmt(ev), 'записей'], [fmt(zn), 'ЗН'], [(ev ? zn / ev * 100 : 0).toFixed(1) + '%', 'конверсия'], ['₽' + (s('rev') / 1e6).toFixed(1) + 'М', 'выручка']]
+    .map(([v, l]) => `<div class="sc"><div class="sv">${v}</div><div class="sl">${l}</div></div>`).join('');
+}
+function delMonth(i) {
+  const m = DATA.monthly[i];
+  if (!confirm(`Удалить ${m.label} вместе с детализацией?`)) return;
+  DATA.monthly.splice(i, 1); delete DATA.detail[m.period]; markDirty(); render();
+}
+
+// ---- Сохранение ----
+async function save() {
+  if (!LOADED) { status('err', 'Сначала загрузите текущие данные (шаг 1)'); return; }
+  const pw = $('pw').value;
+  if (pw.length < 10) { alert('Пароль дашборда должен быть не короче 10 символов. Можно нажать «Сгенерировать».'); return; }
+  if (LOADED_PW && pw !== LOADED_PW && !confirm('Пароль дашборда будет изменён. Старый перестанет работать — сообщите новый коллегам. Продолжить?')) return;
+  const btn = $('save'); btn.disabled = true; btn.textContent = '⏳ Сохраняю…'; bar(10);
+  try {
+    await SEC.anonymizeData(DATA, CODE_OF);
+    DATA.plan = {};
+    log('in', 'Шифрую данные…');
+    const env = await SEC.encrypt(P1C.serialize(DATA), pw); bar(35);
+    const meta = await gh('data.enc.json');
+    let sha; if (meta.ok) sha = (await meta.json()).sha; else if (meta.status !== 404) throw new Error(await ghError(meta));
+    log('in', `Отправляю data.enc.json (${(env.length / 1024).toFixed(0)} КБ)…`); bar(55);
+    const labels = DATA.monthly.map(m => m.label);
+    const r = await gh('data.enc.json', { method: 'PUT', body: JSON.stringify({
+      message: `Данные: ${labels[0] || ''}–${labels[labels.length - 1] || ''} (${new Date().toLocaleDateString('ru')})`,
+      content: b64encode(env), ...(sha ? { sha } : {}) }) });
+    if (!r.ok) throw new Error(await ghError(r));
+    LOADED_PW = pw; bar(80);
+    if (LEGACY_SHA) {
+      log('in', 'Удаляю открытый data.json…');
+      const d = await gh('data.json', { method: 'DELETE', body: JSON.stringify({ message: 'Удалён открытый data.json (данные теперь зашифрованы)', sha: LEGACY_SHA }) });
+      if (d.ok) { LEGACY_SHA = null; log('ok', 'Открытый data.json удалён. Старые версии остаются в истории репозитория — см. инструкцию по переносу в новый репозиторий.'); }
+      else log('er', 'Не удалось удалить data.json: ' + await ghError(d));
+    }
+    bar(100); DIRTY = false;
+    log('ok', '✅ Сохранено и зашифровано. Дашборд обновится через 1–2 минуты.');
+    status('ok', `<b>Сохранено</b> ${new Date().toLocaleTimeString('ru')}`);
+  } catch (e) { bar(0); log('er', 'Ошибка: ' + e.message); }
+  btn.disabled = false; btn.textContent = '🚀 Сохранить на GitHub';
+}
+window.addEventListener('beforeunload', e => { if (DIRTY) { e.preventDefault(); e.returnValue = ''; } });
+</script>
+</body>
+</html>
