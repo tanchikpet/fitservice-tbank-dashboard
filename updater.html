@@ -479,7 +479,7 @@ if (typeof module !== 'undefined') module.exports = SEC;
 
 </script>
 <script>
-let DATA = null, LOADED = false, DIRTY = false, LOADED_PW = null, LEGACY_SHA = null, CODE_OF = null;
+let DATA = null, LOADED = false, DIRTY = false, LOADED_PW = null, LEGACY_SHA = null, CODE_OF = null, KNOWN_SHA = null;
 const $ = id => document.getElementById(id);
 const fmt = n => Math.round(n || 0).toLocaleString('ru');
 const FIELDS = ['events','nv','ov','zn_nv','zn_ov','rev','parts','comm'];
@@ -522,6 +522,7 @@ async function ghError(r) { let m = ''; try { m = (await r.json()).message; } ca
   if (r.status === 401) return 'токен неверный или истёк (401)';
   if (r.status === 403) return 'у токена нет прав на этот репозиторий (403)';
   if (r.status === 404) return 'репозиторий не найден или нет доступа (404)';
+  if (r.status === 409 || r.status === 422) return 'версия файла на GitHub изменилась (' + r.status + '). Нажмите «Загрузить текущие данные» в шаге 1 и сохраните снова — загруженные файлы 1С нужно будет перетащить заново';
   return `${r.status} ${m}`; }
 function b64encode(str) { const bytes = new TextEncoder().encode(str); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(bin); }
 
@@ -535,6 +536,8 @@ async function loadRemote() {
     const files = await chk.json(), names = Array.isArray(files) ? files.map(f => f.name) : [];
     const legacy = Array.isArray(files) ? files.find(f => f.name === 'data.json') : null;
     LEGACY_SHA = legacy ? legacy.sha : null;
+    const encF = Array.isArray(files) ? files.find(f => f.name === 'data.enc.json') : null;
+    KNOWN_SHA = encF ? encF.sha : null;
     let note = '';
     if (names.includes('data.enc.json')) {
       if (!pw) { status('err', 'Введите пароль дашборда, чтобы расшифровать данные'); return; }
@@ -706,14 +709,31 @@ async function save() {
     DATA.plan = {};
     log('in', 'Шифрую данные…');
     const env = await SEC.encrypt(P1C.serialize(DATA), pw); bar(35);
-    const meta = await gh('data.enc.json');
-    let sha; if (meta.ok) sha = (await meta.json()).sha; else if (meta.status !== 404) throw new Error(await ghError(meta));
     log('in', `Отправляю data.enc.json (${(env.length / 1024).toFixed(0)} КБ)…`); bar(55);
     const labels = DATA.monthly.map(m => m.label);
-    const r = await gh('data.enc.json', { method: 'PUT', body: JSON.stringify({
-      message: `Данные: ${labels[0] || ''}–${labels[labels.length - 1] || ''} (${new Date().toLocaleDateString('ru')})`,
-      content: b64encode(env), ...(sha ? { sha } : {}) }) });
+    const payload = { message: `Данные: ${labels[0] || ''}–${labels[labels.length - 1] || ''} (${new Date().toLocaleDateString('ru')})`, content: b64encode(env) };
+    // Текущая версия файла (sha): из списка файлов, из самого файла и из прошлого сохранения.
+    // Сразу после записи GitHub иногда ещё отдаёт старое состояние — тогда ждём и повторяем.
+    const currentSha = async () => {
+      const found = [];
+      try { const r = await gh(''); if (r.ok) { const l = await r.json(); const f = Array.isArray(l) ? l.find(x => x.name === 'data.enc.json') : null; if (f) found.push(f.sha); } } catch (e) {}
+      try { const r = await gh('data.enc.json'); if (r.ok) found.push((await r.json()).sha); } catch (e) {}
+      if (KNOWN_SHA) found.push(KNOWN_SHA);
+      return [...new Set(found)];
+    };
+    let r = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const shas = await currentSha();
+      for (const sha of (shas.length ? shas : [null])) {
+        r = await gh('data.enc.json', { method: 'PUT', body: JSON.stringify({ ...payload, ...(sha ? { sha } : {}) }) });
+        if (r.ok || ![409, 422].includes(r.status)) break;
+      }
+      if (r.ok || ![409, 422].includes(r.status) || attempt === 3) break;
+      log('in', `GitHub ещё обновляет файл после прошлого сохранения — повторяю через ${attempt * 2} сек…`);
+      await new Promise(res => setTimeout(res, attempt * 2000));
+    }
     if (!r.ok) throw new Error(await ghError(r));
+    try { KNOWN_SHA = (await r.json()).content.sha; } catch (e) {}
     LOADED_PW = pw; bar(80);
     if (LEGACY_SHA) {
       log('in', 'Удаляю открытый data.json…');
